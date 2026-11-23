@@ -1,0 +1,16 @@
+name: Route new support requests
+on:
+  issues:
+    types: [opened]
+permissions:
+  issues: write
+jobs:
+  assign:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Assign to the repository owner
+        env:
+          GH_TOKEN: ${{ github.token }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+          OWNER: ${{ github.repository_owner }}
+        run: gh api --method POST "repos/$GITHUB_REPOSITORY/issues/$ISSUE_NUMBER/assignees" -f "assignees[]=$OWNER"
